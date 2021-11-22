@@ -29,7 +29,10 @@ def reg_new_accs():
         logger.debug('start for new accs')
         with Droplet() as do_drop:
             for _ in range(ACC_BY_DROPLET):
-                dribbble.make_new_user(do_drop.ip)
+                try:
+                    dribbble.make_new_user(do_drop.ip)
+                except Exception:
+                    logger.error('make_new_user Exception')
 
 
 @sched.scheduled_job('interval', minutes=3)
