@@ -152,3 +152,4 @@ def _do_boarding(driver):
         lambda d: d.find_element(By.XPATH, '//button[@class="form-sub"]')
     )
     btn_submit.click()
+    sleep(5)
