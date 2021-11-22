@@ -36,7 +36,7 @@ def _like(driver, link):
     )
     like_elem.click()
 
-
+@logger.catch
 def make_new_user(selenium_ip):
     person = _get_rand_person()
     with Browser(selenium_ip) as brwsr:
