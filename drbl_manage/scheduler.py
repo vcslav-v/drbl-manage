@@ -24,7 +24,9 @@ def send_tg_alarm(message):
 @sched.scheduled_job('interval', minutes=1)
 @logger.catch
 def reg_new_accs():
+    logger.debug('check for new accs')
     if db_tools.len_accs() - mem.get_need_accs() < 0:
+        logger.debug('start for new accs')
         with Droplet() as do_drop:
             for _ in range(ACC_BY_DROPLET):
                 dribbble.make_new_user(do_drop.ip)
@@ -33,8 +35,10 @@ def reg_new_accs():
 @sched.scheduled_job('interval', minutes=1)
 @logger.catch
 def do_like_tasks():
+    logger.debug('check for tasks')
     if not mem.exist_active_tasks() or not mem.exist_active_accs():
         return
+    logger.debug('start for tasks')
     tasks = mem.set_tasks_in_work(ACC_BY_DROPLET)
     with Droplet() as do_drop:
         for _ in range(ACC_BY_DROPLET):

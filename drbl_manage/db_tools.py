@@ -3,6 +3,7 @@ import os
 
 from drbl_manage import db, models
 from cryptography.fernet import Fernet
+from random import shuffle
 
 
 def get_cookies(domain: str, username: str) -> list[dict]:
@@ -98,6 +99,7 @@ def get_acc_ids():
         accs = session.query(models.Account).all()
         for acc in accs:
             result.append(acc.id)
+    shuffle(result)
     return result
 
 
