@@ -1,5 +1,6 @@
 import os
 from random import choice, random
+from time import sleep
 
 from faker import Faker
 from loguru import logger
@@ -35,6 +36,7 @@ def _like(driver, link):
         lambda d: d.find_element(By.ID, 'shots-like-button')
     )
     like_elem.click()
+
 
 @logger.catch
 def make_new_user(selenium_ip):
@@ -129,6 +131,7 @@ def _do_boarding(driver):
     local_input_elem = driver.find_element(By.ID, 'location')
     local_input_elem.send_keys(choice(['USA', 'Canada', 'England', 'Barselona', 'NY', 'Spain']))
 
+    sleep(3)
     btn_submit = driver.find_element(By.XPATH, '//button[@class="form-sub"]')
     btn_submit.click()
 
