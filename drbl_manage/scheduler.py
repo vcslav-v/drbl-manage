@@ -1,0 +1,51 @@
+import os
+
+import requests
+from apscheduler.schedulers.blocking import BlockingScheduler
+from loguru import logger
+
+from drbl_manage.droplet import Droplet
+from drbl_manage import db_tools, dribbble, mem
+
+sched = BlockingScheduler()
+
+ACC_BY_DROPLET = 10
+
+
+def send_tg_alarm(message):
+    requests.post(
+        'https://api.telegram.org/bot{token}/sendMessage?chat_id={tui}&text={text}'.format(
+            token=os.environ.get('ALLERT_BOT_TOKEN'),
+            tui=os.environ.get('ADMIN_TUI'),
+            text=message,
+        ))
+
+
+@sched.scheduled_job('interval', minutes=1)
+@logger.catch
+def reg_new_accs():
+    if db_tools.len_accs() - mem.get_need_accs() < 0:
+        with Droplet() as do_drop:
+            for _ in range(ACC_BY_DROPLET):
+                dribbble.make_new_user(do_drop.ip)
+
+
+@sched.scheduled_job('interval', minutes=1)
+@logger.catch
+def do_like_tasks():
+    if not mem.exist_active_tasks() or not mem.exist_active_accs():
+        return
+    tasks = mem.set_tasks_in_work(ACC_BY_DROPLET)
+    with Droplet() as do_drop:
+        for _ in range(ACC_BY_DROPLET):
+            try:
+                dribbble.like(do_drop.ip, tasks)
+            except Exception as e:
+                logger.error(e)
+            finally:
+                mem.tasks_unreserve(tasks, ACC_BY_DROPLET)
+
+
+if __name__ == "__main__":
+    logger.add(sink=send_tg_alarm, level='INFO')
+    sched.start()
