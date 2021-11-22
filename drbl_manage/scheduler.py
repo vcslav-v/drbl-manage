@@ -21,7 +21,7 @@ def send_tg_alarm(message):
         ))
 
 
-@sched.scheduled_job('interval', minutes=1)
+@sched.scheduled_job('interval', minutes=3)
 @logger.catch
 def reg_new_accs():
     logger.debug('check for new accs')
@@ -32,7 +32,7 @@ def reg_new_accs():
                 dribbble.make_new_user(do_drop.ip)
 
 
-@sched.scheduled_job('interval', minutes=1)
+@sched.scheduled_job('interval', minutes=3)
 @logger.catch
 def do_like_tasks():
     logger.debug('check for tasks')

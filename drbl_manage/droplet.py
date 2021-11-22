@@ -18,6 +18,7 @@ class Droplet:
         if resp.ok:
             self.id = json.loads(resp.content)['droplet']['id']
             self._get_droplet_ip()
+            sleep(30)
         else:
             self.id = None
 
