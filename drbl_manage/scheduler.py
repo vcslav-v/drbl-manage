@@ -9,7 +9,7 @@ from drbl_manage import db_tools, dribbble, mem
 
 sched = BlockingScheduler()
 
-ACC_BY_DROPLET = 10
+ACC_BY_DROPLET = 5
 
 
 def send_tg_alarm(message):

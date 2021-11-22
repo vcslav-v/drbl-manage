@@ -140,5 +140,6 @@ def _do_boarding(driver):
     plan_elem = plan_elems[-1]
     plan_elem.click()
 
+    sleep(2)
     btn_submit = driver.find_element(By.XPATH, '//button[@class="form-sub"]')
     btn_submit.click()
