@@ -135,6 +135,7 @@ def _do_boarding(driver):
     btn_submit = driver.find_element(By.XPATH, '//button[@class="form-sub"]')
     btn_submit.click()
 
+    sleep(5)
     plan_elems = driver.find_elements(By.XPATH, '//div[@class="image-select-box-choice"]')
     plan_elem = plan_elems[-1]
     plan_elem.click()
