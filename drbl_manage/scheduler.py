@@ -1,11 +1,12 @@
 import os
+import threading
 
 import requests
 from apscheduler.schedulers.blocking import BlockingScheduler
 from loguru import logger
 
-from drbl_manage.droplet import Droplet
 from drbl_manage import db_tools, dribbble, mem
+from drbl_manage.droplet import Droplet
 
 sched = BlockingScheduler()
 
@@ -43,6 +44,12 @@ def do_like_tasks():
         return
     logger.debug('start for tasks')
     tasks = mem.set_tasks_in_work(ACC_BY_DROPLET)
+    if tasks:
+        thread = threading.Thread(target=do_tasks, args=(tasks,))
+        thread.start()
+
+
+def do_tasks(tasks):
     with Droplet() as do_drop:
         for _ in range(ACC_BY_DROPLET):
             try:

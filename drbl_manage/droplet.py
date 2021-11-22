@@ -2,15 +2,17 @@ import json
 import os
 from time import sleep
 from loguru import logger
+from random import choice
 
 import requests
 
 
 class Droplet:
     def __init__(self) -> None:
+        regions = ['nyc1', 'nyc3', 'sfo3', 'ams3', 'sgp1', 'lon1', 'fra1', 'tor1', 'blr1']
         payloads = {
             'name': 'temp-selenoid',
-            'region': 'nyc3',
+            'region': choice(regions),
             'size': 's-1vcpu-2gb',
             'image': 'selenoid-18-04'
         }
