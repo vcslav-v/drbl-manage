@@ -38,6 +38,10 @@ def get_need_accs():
         return 0
 
 
+def flush_accs():
+    r.delete(ACCOUNTS)
+
+
 def len_accs():
     return r.llen(ACCOUNTS)
 

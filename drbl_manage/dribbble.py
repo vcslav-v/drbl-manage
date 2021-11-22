@@ -91,7 +91,7 @@ def _get_rand_person():
     first_name = fake.first_name()
     last_name = fake.last_name()
     result['name'] = ' '.join([first_name, last_name])
-    result['username'] = '_'.join([first_name, last_name, fake.user_name()])
+    result['username'] = '_'.join([first_name, last_name, fake.user_name()])[:29]
     result['password'] = fake.password(10)
 
     result['email'] = _get_new_email()
