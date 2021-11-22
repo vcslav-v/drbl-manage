@@ -1,5 +1,6 @@
 import os
 from random import choice, random
+from time import sleep
 
 from faker import Faker
 from loguru import logger
@@ -123,6 +124,7 @@ def _do_boarding(driver):
         lambda d: d.find_element(By.XPATH, '//a[@class="avatar-select-trigger"]')
     )
     avatar_select_elem.click()
+    sleep(5)
     userpic_elems = WebDriverWait(driver, timeout=10).until(
         lambda d: d.find_elements(By.XPATH, '//li[@class="avatar-select-item"]')
     )
@@ -132,17 +134,20 @@ def _do_boarding(driver):
     local_input_elem = driver.find_element(By.ID, 'location')
     local_input_elem.send_keys(choice(['USA', 'Canada', 'England', 'Barselona', 'NY', 'Spain']))
 
+    sleep(5)
     btn_submit = WebDriverWait(driver, timeout=10).until(
         lambda d: d.find_element(By.XPATH, '//button[@class="form-sub"]')
     )
     btn_submit.click()
 
+    sleep(5)
     plan_elems = WebDriverWait(driver, timeout=10).until(
         lambda d: d.find_elements(By.XPATH, '//div[@class="image-select-box-choice"]')
     )
     plan_elem = plan_elems[-1]
     plan_elem.click()
 
+    sleep(5)
     btn_submit = WebDriverWait(driver, timeout=10).until(
         lambda d: d.find_element(By.XPATH, '//button[@class="form-sub"]')
     )
