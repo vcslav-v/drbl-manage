@@ -107,7 +107,7 @@ def _do_sign_up(driver, person):
     mail_input_elem.send_keys(person['email'])
     pass_input_elem = driver.find_element(By.ID, 'user_password')
     pass_input_elem.send_keys(person['password'])
-    flag_elem = driver.find_element(By.ID, 'user_agree_to_terms')
+    flag_elem = driver.find_element(By.XPATH, '//label[@for="user_agree_to_terms"]')
     flag_elem.click()
     btn_submit = driver.find_element(By.XPATH, '//input[@type="submit"]')
     btn_submit.click()
