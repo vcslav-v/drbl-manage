@@ -14,7 +14,8 @@ class Droplet:
             'name': 'temp-selenoid',
             'region': choice(regions),
             'size': 's-1vcpu-2gb',
-            'image': 'selenoid-18-04'
+            'image': 'selenoid-18-04',
+            'ipv6': True,
         }
         resp = self._do_req('post', 'droplets', payloads)
         if resp.ok:

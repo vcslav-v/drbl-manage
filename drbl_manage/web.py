@@ -73,7 +73,7 @@ def index():
                             flash('Are you serious? This url has been added already!')
 
                     else:
-                        flash("It'snt right url")
+                        flash("It isn't right url")
         elif rm and rm.isdigit():
             rm_id = int(rm)
             mem.rm_task(rm_id)
