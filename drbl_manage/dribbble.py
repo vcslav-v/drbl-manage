@@ -21,8 +21,8 @@ def do_tasks(selenium_ip, tasks):
         _login(brwsr, account)
         for task in tasks:
             task_key, task_link = task
+            brwsr.driver.get(task_link)
             try:
-                brwsr.driver.get(task_link)
                 _like(brwsr.driver)
             except Exception as e:
                 logger.error(f'_like {e.message}')

@@ -69,7 +69,7 @@ def index():
                         if not mem.exist_active_tasks():
                             mem.flush_accs()
                             mem.set_accs(db_tools.get_acc_ids())
-                        elif not mem.set_task(add_link, add_quantity):
+                        if not mem.set_task(add_link, add_quantity):
                             flash('Are you serious? This url has been added already!')
 
                     else:
