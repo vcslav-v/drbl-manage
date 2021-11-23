@@ -14,7 +14,7 @@ from drbl_manage.models import Account
 
 
 def do_tasks(selenium_ip, tasks):
-    with Browser(selenium_ip) as brwsr:
+    with Browser(selenium_ip, False) as brwsr:
         account: Account = db_tools.get_acc(mem.pop_acc_id())
         if not account:
             return
@@ -74,7 +74,7 @@ def make_new_user(selenium_ip):
 def _login(brwsr: Browser, account: Account):
     brwsr.set_cookies('https://dribbble.com', account.name)
     try:
-        WebDriverWait(brwsr.driver, timeout=10).until(
+        WebDriverWait(brwsr.driver, timeout=3).until(
             lambda d: d.find_element(By.XPATH, '//a[@data-site-nav-element="User"]')
         )
     except TimeoutException:

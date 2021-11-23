@@ -10,7 +10,7 @@ from drbl_manage import db_tools
 
 
 class Browser:
-    def __init__(self, selenium_ip) -> None:
+    def __init__(self, selenium_ip, antcpt=True) -> None:
         browser_options = webdriver.chrome.options.Options()
         browser_options.add_argument('--kiosk')
         browser_options.set_capability('browserName', 'chrome')
@@ -21,17 +21,18 @@ class Browser:
                 command_executor=f'http://{selenium_ip}:4444/wd/hub',
                 options=browser_options,
             )
-        driver.get('https://antcpt.com/blank.html')
-        message = {
-                'receiver': 'antiCaptchaPlugin',
-                'type': 'setOptions',
-                'options': {'antiCaptchaApiKey': os.environ.get('AC_KEY')},
-            }
-        sleep(10)
-        driver.execute_script(
-            'return window.postMessage({});'.format(json.dumps(message)),
-        )
-        sleep(5)
+        if antcpt:
+            driver.get('https://antcpt.com/blank.html')
+            message = {
+                    'receiver': 'antiCaptchaPlugin',
+                    'type': 'setOptions',
+                    'options': {'antiCaptchaApiKey': os.environ.get('AC_KEY')},
+                }
+            sleep(10)
+            driver.execute_script(
+                'return window.postMessage({});'.format(json.dumps(message)),
+            )
+            sleep(5)
         self.driver = driver
 
     def close(self):

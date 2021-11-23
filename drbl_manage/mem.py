@@ -1,5 +1,6 @@
 import os
 from urllib.parse import urlparse
+from loguru import logger
 
 import redis
 
@@ -106,6 +107,11 @@ def _task_reserve(task_key, num):
         task_in_work = int(r.hget(task_key, 'in_work'))
         need_likes = int(r.hget(task_key, 'likes'))
         task_done = int(r.hget(task_key, 'done'))
+        logger.debug({
+            'task_in_work': task_in_work,
+            'need_likes': need_likes,
+            'task_done': task_done,
+        })
         if task_in_work + task_done >= need_likes:
             return False
         r.hset(task_key, mapping={'in_work': task_in_work + num})
