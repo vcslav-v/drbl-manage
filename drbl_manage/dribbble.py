@@ -22,20 +22,42 @@ def do_tasks(selenium_ip, tasks):
         for task in tasks:
             task_key, task_link = task
             try:
-                _like(brwsr.driver, task_link)
+                brwsr.driver.get(task_link)
+                _like(brwsr.driver)
             except Exception as e:
-                logger.error(e)
+                logger.error(f'_like {e.message}')
             else:
                 mem.task_done(task_key)
+
+            try:
+                _follow(brwsr.driver)
+            except Exception as e:
+                logger.error(f'_follow {e.message}')
         brwsr.save_cookies('https://dribbble.com', account.username)
 
 
-def _like(driver, link):
-    driver.get(link)
+def _like(driver):
     like_elem = WebDriverWait(driver, timeout=10).until(
         lambda d: d.find_element(By.ID, 'shots-like-button')
     )
     like_elem.click()
+    sleep(3)
+
+
+def _follow(driver):
+    try:
+        WebDriverWait(driver, timeout=5).until(
+            lambda d: d.find_element(
+                By.XPATH,
+                '//div[contains(@class, "followed-by-current-user")]'
+            )
+        )
+    except TimeoutException:
+        follow_elem = WebDriverWait(driver, timeout=5).until(
+            lambda d: d.find_element(By.XPATH, '//div[contains(@class, "follow-prompt")]')
+        )
+        follow_elem.click()
+        sleep(3)
 
 
 @logger.catch
