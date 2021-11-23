@@ -25,14 +25,14 @@ def do_tasks(selenium_ip, tasks):
             try:
                 _like(brwsr.driver)
             except Exception as e:
-                logger.error(f'_like {e.message}')
+                logger.error(f'_like {e.with_traceback()}')
             else:
                 mem.task_done(task_key)
 
             try:
                 _follow(brwsr.driver)
             except Exception as e:
-                logger.error(f'_follow {e.message}')
+                logger.error(f'_follow {e.with_traceback()}')
         brwsr.save_cookies('https://dribbble.com', account.username)
 
 

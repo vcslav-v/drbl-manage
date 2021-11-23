@@ -55,9 +55,9 @@ def do_tasks(tasks):
             try:
                 dribbble.do_tasks(do_drop.ip, tasks)
             except Exception as e:
-                logger.error(e.message)
+                logger.error(e.with_traceback())
             finally:
-                mem.tasks_unreserve(tasks, ACC_BY_DROPLET)
+                mem.tasks_unreserve(tasks, 1)
 
 
 if __name__ == "__main__":
