@@ -53,7 +53,7 @@ def do_tasks(tasks):
     with Droplet() as do_drop:
         for _ in range(ACC_BY_DROPLET):
             try:
-                dribbble.like(do_drop.ip, tasks)
+                dribbble.do_tasks(do_drop.ip, tasks)
             except Exception as e:
                 logger.error(e)
             finally:
