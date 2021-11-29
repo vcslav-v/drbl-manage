@@ -34,12 +34,12 @@ def get_liker_page_data(_: str = Depends(get_current_username)) -> schemas.Liker
         tasks=[],
     )
     for task in mem.get_active_tasks():
-        page_data.tasks.append(
+        page_data.tasks.append(schemas.Task(
             id=int(task['id']),
             link=task['link'],
             targ_like=int(task['targ_like']),
             done_like=int(task['done_like']),
-        )
+        ))
     return page_data
 
 
