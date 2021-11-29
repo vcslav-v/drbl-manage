@@ -60,12 +60,11 @@ def set_task(link, likes):
     task_keys = r.keys(f'{DR_TASK}:*')
     for task_key in task_keys:
         if r.hget(task_key, 'link') == link:
-            return False
+            raise ValueError
     task_nums = list(map(lambda task: int(task.split(':')[-1]), task_keys))
     max_num = max(task_nums) if task_nums else 0
     next_num = max_num + 1
     r.hset(f'{DR_TASK}:{next_num}', mapping={'link': link, 'likes': likes, 'in_work': 0, 'done': 0})
-    return True
 
 
 def task_done(task_key):

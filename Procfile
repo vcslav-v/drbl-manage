@@ -1,3 +1,3 @@
 release: alembic upgrade head
 clock: python drbl_manage/scheduler.py
-web: gunicorn drbl_manage.web:app --bind 0.0.0.0:$PORT -w 1
+web: gunicorn -w 4 -k uvicorn.workers.UvicornWorker drbl_manage.main:app
