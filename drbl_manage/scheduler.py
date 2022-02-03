@@ -1,4 +1,5 @@
 import os
+import threading
 
 import requests
 from apscheduler.schedulers.blocking import BlockingScheduler
@@ -42,8 +43,10 @@ def do_like_tasks():
     if not mem.exist_active_tasks() or not mem.exist_active_accs():
         return
     tasks = mem.set_tasks_in_work(ACC_BY_DROPLET)
-    if tasks:
-        do_tasks(tasks)
+    
+    if tasks and tasks['task_in_work'] <= 0:
+        thread = threading.Thread(target=do_tasks, args=(tasks,))
+        thread.start()
 
 
 def do_tasks(tasks):

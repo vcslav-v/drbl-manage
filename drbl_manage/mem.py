@@ -111,7 +111,7 @@ def _task_reserve(task_key, num):
             'need_likes': need_likes,
             'task_done': task_done,
         })
-        if task_in_work + task_done >= need_likes:
+        if task_in_work > 0:
             return False
         r.hset(task_key, mapping={'in_work': task_in_work + num})
         return True

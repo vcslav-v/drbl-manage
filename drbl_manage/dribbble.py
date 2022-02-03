@@ -12,6 +12,7 @@ from drbl_manage import db_tools, mem
 from drbl_manage.browser import Browser
 from drbl_manage.models import Account
 
+
 @logger.catch
 def do_tasks(selenium_ip, tasks):
     logger.debug('task {tasks}'.format(tasks=tasks))
