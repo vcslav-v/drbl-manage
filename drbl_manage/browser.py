@@ -17,7 +17,7 @@ class Browser:
         browser_options.set_capability('browserName', 'chrome')
         browser_options.set_capability('enableVNC', True)
         browser_options.set_capability('enableVideo', False)
-        browser_options.add_extension('anticaptcha.crx')
+        # browser_options.add_extension('anticaptcha.crx')
         driver = webdriver.Remote(
                 command_executor=f'http://{selenium_ip}:4444/wd/hub',
                 options=browser_options,
