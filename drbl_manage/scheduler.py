@@ -41,7 +41,6 @@ def do_like_tasks():
     logger.debug('check for tasks')
     if not mem.exist_active_tasks() or not mem.exist_active_accs():
         return
-    logger.debug('start for tasks')
     tasks = mem.set_tasks_in_work(ACC_BY_DROPLET)
     if tasks:
         do_tasks(tasks)
@@ -49,6 +48,7 @@ def do_like_tasks():
 
 def do_tasks(tasks):
     with Droplet() as do_drop:
+        logger.debug('start for tasks')
         for _ in range(ACC_BY_DROPLET):
             try:
                 dribbble.do_tasks(do_drop.ip, tasks)
