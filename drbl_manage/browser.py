@@ -11,6 +11,7 @@ from drbl_manage import db_tools
 
 class Browser:
     def __init__(self, selenium_ip, antcpt=True) -> None:
+        logger.debug(selenium_ip)
         browser_options = webdriver.chrome.options.Options()
         browser_options.add_argument('--kiosk')
         browser_options.set_capability('browserName', 'chrome')
@@ -21,7 +22,6 @@ class Browser:
                 command_executor=f'http://{selenium_ip}:4444/wd/hub',
                 options=browser_options,
             )
-        logger.debug(driver)
         if antcpt:
             driver.get('https://antcpt.com/blank.html')
             message = {
