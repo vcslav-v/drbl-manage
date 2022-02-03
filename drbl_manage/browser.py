@@ -21,6 +21,7 @@ class Browser:
                 command_executor=f'http://{selenium_ip}:4444/wd/hub',
                 options=browser_options,
             )
+        logger.debug(driver)
         if antcpt:
             driver.get('https://antcpt.com/blank.html')
             message = {
