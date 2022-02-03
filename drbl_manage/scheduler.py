@@ -1,5 +1,4 @@
 import os
-import threading
 
 import requests
 from apscheduler.schedulers.blocking import BlockingScheduler
@@ -45,8 +44,7 @@ def do_like_tasks():
     logger.debug('start for tasks')
     tasks = mem.set_tasks_in_work(ACC_BY_DROPLET)
     if tasks:
-        thread = threading.Thread(target=do_tasks, args=(tasks,))
-        thread.start()
+        do_tasks(tasks)
 
 
 def do_tasks(tasks):
