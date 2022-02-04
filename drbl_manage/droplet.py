@@ -36,7 +36,9 @@ class Droplet:
             logger.debug(resp.content)
             for droplet_info in json.loads(resp.content)['droplets']:
                 if droplet_info['id'] == self.id:
-                    droplet_ip = droplet_info['networks']['v4'][0]['ip_address']
+                    for ip_info in droplet_info['networks']['v4']:
+                        if ip_info['type'] == 'public':
+                            droplet_ip = ip_info['ip_address']
                     status = droplet_info['status']
                     break
         self.ip = droplet_ip
