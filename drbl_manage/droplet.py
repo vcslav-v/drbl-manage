@@ -33,7 +33,7 @@ class Droplet:
         while status == 'new':
             sleep(10)
             resp = self._do_req('get', 'droplets')
-            logger.debug(resp)
+            logger.debug(resp.content)
             for droplet_info in json.loads(resp.content)['droplets']:
                 if droplet_info['id'] == self.id:
                     droplet_ip = droplet_info['networks']['v4'][0]['ip_address']
