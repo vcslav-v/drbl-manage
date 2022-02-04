@@ -17,12 +17,11 @@ class Browser:
         browser_options.set_capability('browserName', 'chrome')
         browser_options.set_capability('enableVNC', True)
         browser_options.set_capability('enableVideo', False)
-        logger.debug('driver')
+        browser_options.add_extension('anticaptcha.crx')
         driver = webdriver.Remote(
                 command_executor=f'http://{selenium_ip}:4444/wd/hub',
                 options=browser_options,
             )
-        logger.debug('driver geted')
         if antcpt:
             driver.get('https://antcpt.com/blank.html')
             message = {
