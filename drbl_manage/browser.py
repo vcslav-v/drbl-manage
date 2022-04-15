@@ -1,19 +1,31 @@
 import json
 import os
+from random import choice
 from time import sleep
 from urllib.parse import urlparse
-from loguru import logger
 
+import requests
+from loguru import logger
 from selenium import webdriver
 
 from drbl_manage import db_tools
 
 
 class Browser:
-    def __init__(self, selenium_ip, antcpt=True) -> None:
+    def __init__(self, selenium_ip, antcpt=True, proxy=True) -> None:
         logger.debug(selenium_ip)
         browser_options = webdriver.chrome.options.Options()
+        chrome_prefs = {}
+        chrome_prefs["profile.default_content_settings"] = {"images": 2}
+        chrome_prefs["profile.managed_default_content_settings"] = {"images": 2}
+        browser_options.experimental_options["prefs"] = chrome_prefs
         browser_options.add_argument('--kiosk')
+        if proxy:
+            resp_pr = requests.get(os.environ.get('PROXY_API_KEY'))
+            proxies = json.loads(resp_pr.text)
+            proxy = choice(proxies)
+            proxy = f'{proxy["ip"]}:{proxy["port"]}'
+            browser_options.add_argument(f'--proxy-server={proxy}')
         browser_options.set_capability('browserName', 'chrome')
         browser_options.set_capability('enableVNC', True)
         browser_options.set_capability('enableVideo', False)

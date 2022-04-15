@@ -16,7 +16,7 @@ from drbl_manage.models import Account
 @logger.catch
 def do_tasks(selenium_ip, tasks):
     logger.debug('task {tasks}'.format(tasks=tasks))
-    with Browser(selenium_ip, False) as brwsr:
+    with Browser(selenium_ip, True, True) as brwsr:
         logger.debug('brwsr open')
         account: Account = db_tools.get_acc(mem.pop_acc_id())
         if not account:
