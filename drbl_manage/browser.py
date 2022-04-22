@@ -20,9 +20,6 @@ class Browser:
         chrome_prefs["profile.managed_default_content_settings"] = {"images": 2}
         browser_options.experimental_options["prefs"] = chrome_prefs
         browser_options.add_argument('--kiosk')
-        if proxy:
-            proxy_server = self._get_proxy()
-            browser_options.add_argument(f'proxy-server={proxy_server}')
         browser_options.set_capability('browserName', 'chrome')
         browser_options.set_capability('enableVNC', True)
         browser_options.set_capability('enableVideo', False)
@@ -43,6 +40,10 @@ class Browser:
                 'return window.postMessage({});'.format(json.dumps(message)),
             )
             sleep(5)
+        
+        if proxy:
+            proxy_server = self._get_proxy()
+            browser_options.add_argument(f'proxy-server={proxy_server}')
         self.driver = driver
 
     def close(self):
