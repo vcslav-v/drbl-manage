@@ -21,11 +21,8 @@ class Browser:
         browser_options.experimental_options["prefs"] = chrome_prefs
         browser_options.add_argument('--kiosk')
         if proxy:
-            resp_pr = requests.get(os.environ.get('PROXY_API_KEY'))
-            proxies = json.loads(resp_pr.text)
-            proxy = choice(proxies)
-            proxy = f'{proxy["ip"]}:{proxy["port"]}'
-            browser_options.add_argument(f'--proxy-server={proxy}')
+            proxy_server = self._get_proxy()
+            browser_options.add_argument(f'proxy-server={proxy_server}')
         browser_options.set_capability('browserName', 'chrome')
         browser_options.set_capability('enableVNC', True)
         browser_options.set_capability('enableVideo', False)
@@ -50,6 +47,12 @@ class Browser:
 
     def close(self):
         self.driver.close()
+
+    def _get_proxy(self) -> str:
+        response = requests.get(os.environ.get('PROXY_API_KEY'))
+        proxies = json.loads(response.text)
+        proxy = choice(proxies)
+        return '{hostname}:{port}'.format(**proxy)
 
     def set_cookies(self, site_url: str, username: str):
         self.driver.get(site_url)
