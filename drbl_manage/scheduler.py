@@ -10,8 +10,7 @@ from drbl_manage.droplet import Droplet
 
 sched = BlockingScheduler()
 
-ACC_BY_DROPLET = 5
-MAX_DROPLETS = 10
+ACC_BY_DROPLET = 10
 
 
 def send_tg_alarm(message):
@@ -43,14 +42,9 @@ def do_like_tasks():
     logger.debug('check for tasks')
     if not mem.exist_active_tasks() or not mem.exist_active_accs():
         return
-    threads = []
-    for _ in range(MAX_DROPLETS):
-        tasks = mem.set_tasks_in_work(ACC_BY_DROPLET)
-        if tasks:
-            threads.append(threading.Thread(target=do_tasks, args=(tasks,)))
-        else:
-            break
-    for thread in threads:
+    tasks = mem.set_tasks_in_work(ACC_BY_DROPLET)
+    if tasks:
+        thread = threading.Thread(target=do_tasks, args=(tasks,))
         thread.start()
 
 
