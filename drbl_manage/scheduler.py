@@ -10,7 +10,7 @@ from drbl_manage.droplet import Droplet
 
 sched = BlockingScheduler()
 
-ACC_BY_DROPLET = 10
+ACC_BY_DROPLET = 3
 
 
 def send_tg_alarm(message):
