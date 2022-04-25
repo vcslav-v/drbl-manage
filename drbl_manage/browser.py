@@ -12,6 +12,7 @@ from drbl_manage import db_tools
 
 
 class Browser:
+    """Browser"""
     def __init__(self, selenium_ip, antcpt=True, proxy=True) -> None:
         logger.debug(selenium_ip)
         browser_options = webdriver.chrome.options.Options()
