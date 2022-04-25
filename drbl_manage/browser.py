@@ -16,8 +16,8 @@ class Browser:
         logger.debug(selenium_ip)
         browser_options = webdriver.chrome.options.Options()
         chrome_prefs = {}
-        chrome_prefs["profile.default_content_settings"] = {"images": 2}
-        chrome_prefs["profile.managed_default_content_settings"] = {"images": 2}
+        # chrome_prefs["profile.default_content_settings"] = {"images": 2}
+        # chrome_prefs["profile.managed_default_content_settings"] = {"images": 2}
         browser_options.experimental_options["prefs"] = chrome_prefs
         browser_options.add_argument('--kiosk')
         if proxy:
