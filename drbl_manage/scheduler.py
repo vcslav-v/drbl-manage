@@ -41,8 +41,11 @@ def reg_new_accs():
 def do_like_tasks():
     logger.debug('check for tasks')
     if not mem.exist_active_tasks() or not mem.exist_active_accs():
+        logger.debug(f'exist_active_tasks - {mem.exist_active_tasks()}')
+        logger.debug(f'exist_active_accs - {mem.exist_active_accs()}')
         return
     tasks = mem.set_tasks_in_work(ACC_BY_DROPLET)
+    logger.debug(f'tasks - {tasks}')
     if tasks:
         thread = threading.Thread(target=do_tasks, args=(tasks,))
         thread.start()
