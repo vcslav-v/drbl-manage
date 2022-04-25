@@ -120,10 +120,10 @@ def _task_reserve(task_key, num):
 def set_tasks_in_work(num):
     task_keys = r.keys(f'{DR_TASK}:*')
     tasks = []
-    for task_key in task_keys:
-        task_in_work = int(r.hget(task_key, 'in_work'))
-        if task_in_work > 0:
-            return []
+    # for task_key in task_keys:
+    #     task_in_work = int(r.hget(task_key, 'in_work'))
+    #     if task_in_work > 0:
+    #         return []
     for task_key in task_keys:
         if _task_reserve(task_key, num):
             link = r.hget(task_key, 'link')
