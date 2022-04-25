@@ -10,7 +10,7 @@ from drbl_manage.droplet import Droplet
 
 sched = BlockingScheduler()
 
-ACC_BY_DROPLET = 10
+ACC_BY_DROPLET = 5
 MAX_DROPLETS = 10
 
 
