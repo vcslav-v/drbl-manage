@@ -43,6 +43,12 @@ def flush_accs():
     r.delete(ACCOUNTS)
 
 
+def flush_tasks_in_work():
+    task_keys = r.keys(f'{DR_TASK}:*')
+    for task_key in task_keys:
+        r.hset(task_key, mapping={'in_work': 0})
+
+
 def len_accs():
     return r.llen(ACCOUNTS)
 
@@ -120,10 +126,6 @@ def _task_reserve(task_key, num):
 def set_tasks_in_work(num):
     task_keys = r.keys(f'{DR_TASK}:*')
     tasks = []
-    # for task_key in task_keys:
-    #     task_in_work = int(r.hget(task_key, 'in_work'))
-    #     if task_in_work > 0:
-    #         return []
     for task_key in task_keys:
         if _task_reserve(task_key, num):
             link = r.hget(task_key, 'link')
@@ -164,3 +166,6 @@ def exist_active_accs():
         return True
     else:
         return False
+
+
+flush_tasks_in_work()
