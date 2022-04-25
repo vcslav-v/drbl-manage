@@ -43,13 +43,15 @@ def do_like_tasks():
     logger.debug('check for tasks')
     if not mem.exist_active_tasks() or not mem.exist_active_accs():
         return
+    threads = []
     for _ in range(MAX_DROPLETS):
         tasks = mem.set_tasks_in_work(ACC_BY_DROPLET)
         if tasks:
-            thread = threading.Thread(target=do_tasks, args=(tasks,))
-            thread.start()
+            threads.append(threading.Thread(target=do_tasks, args=(tasks,)))
         else:
             break
+    for thread in threads:
+        thread.start()
 
 
 def do_tasks(tasks):
