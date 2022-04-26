@@ -45,7 +45,6 @@ class Droplet:
                     break
         self.ip = droplet_ip
 
-
     def __enter__(self):
         return self
 
@@ -55,34 +54,32 @@ class Droplet:
             logger.error(exc_tb)
 
 
-
 def do_req(type_req, end_point, payloads=None) -> requests.Response:
-        api_token = os.environ.get('DO_TOKEN')
-        headers = {
-            'Content-Type': 'application/json',
-            'Authorization': f'Bearer {api_token}',
-        }
+    api_token = os.environ.get('DO_TOKEN')
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {api_token}',
+    }
 
-        if type_req == 'post':
-            resp = requests.post(
-                f'https://api.digitalocean.com/v2/{end_point}',
-                headers=headers,
-                json=payloads,
-            )
-        elif type_req == 'del':
-            resp = requests.delete(
-                f'https://api.digitalocean.com/v2/{end_point}',
-                headers=headers,
-                json=payloads,
-            )
-        elif type_req == 'get':
-            resp = requests.get(
-                f'https://api.digitalocean.com/v2/{end_point}',
-                headers=headers,
-                json=payloads,
-            )
-
-        return resp
+    if type_req == 'post':
+        resp = requests.post(
+            f'https://api.digitalocean.com/v2/{end_point}',
+            headers=headers,
+            json=payloads,
+        )
+    elif type_req == 'del':
+        resp = requests.delete(
+            f'https://api.digitalocean.com/v2/{end_point}',
+            headers=headers,
+            json=payloads,
+        )
+    elif type_req == 'get':
+        resp = requests.get(
+            f'https://api.digitalocean.com/v2/{end_point}',
+            headers=headers,
+            json=payloads,
+        )
+    return resp
 
 
 def flush_droplets():
