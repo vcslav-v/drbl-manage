@@ -6,18 +6,20 @@ from random import choice, randint
 
 import requests
 
+DROP_PREFIX = 'temp-selenoid-dribbble'
+
 
 class Droplet:
     def __init__(self) -> None:
         regions = ['nyc1', 'nyc3', 'sfo3', 'ams3', 'sgp1', 'lon1', 'fra1', 'tor1', 'blr1']
         payloads = {
-            'name': f'temp-selenoid-{randint(1,100)}',
+            'name': f'{DROP_PREFIX}-{randint(1,100)}',
             'region': choice(regions),
             'size': 's-1vcpu-2gb',
             'image': 'selenoid-18-04',
             'ipv6': True,
         }
-        resp = self._do_req('post', 'droplets', payloads)
+        resp = do_req('post', 'droplets', payloads)
         if resp.ok:
             self.id = json.loads(resp.content)['droplet']['id']
             self._get_droplet_ip()
@@ -26,13 +28,13 @@ class Droplet:
             self.id = None
 
     def close(self):
-        self._do_req('del', f'droplets/{self.id}')
+        do_req('del', f'droplets/{self.id}')
 
     def _get_droplet_ip(self):
         status = 'new'
         while status == 'new':
             sleep(10)
-            resp = self._do_req('get', 'droplets')
+            resp = do_req('get', 'droplets')
             logger.debug(resp.content)
             for droplet_info in json.loads(resp.content)['droplets']:
                 if droplet_info['id'] == self.id:
@@ -43,7 +45,18 @@ class Droplet:
                     break
         self.ip = droplet_ip
 
-    def _do_req(self, type_req, end_point, payloads=None) -> requests.Response:
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
+        if exc_type:
+            logger.error(exc_tb)
+
+
+
+def do_req(type_req, end_point, payloads=None) -> requests.Response:
         api_token = os.environ.get('DO_TOKEN')
         headers = {
             'Content-Type': 'application/json',
@@ -71,10 +84,8 @@ class Droplet:
 
         return resp
 
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.close()
-        if exc_type:
-            logger.error(exc_tb)
+def flush_droplets():
+    resp = do_req('get', 'droplets')
+    for droplet_info in json.loads(resp.content)['droplets']:
+        if droplet_info['name'].startswith(DROP_PREFIX):
+            do_req('del', f'droplets/{droplet_info['id']}')

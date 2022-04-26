@@ -36,7 +36,7 @@ def reg_new_accs():
                     logger.error('make_new_user Exception')
 
 
-@sched.scheduled_job('interval', minutes=1)
+@sched.scheduled_job('interval', minutes=3)
 @logger.catch
 def do_like_tasks():
     logger.debug('check for tasks')

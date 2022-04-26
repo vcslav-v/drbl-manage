@@ -4,6 +4,8 @@ from loguru import logger
 
 import redis
 
+from drbl_manage import droplet
+
 ACCOUNTS = 'accounts'
 DR_TASK = 'task'
 NEED_ACC = 'need_accs'
@@ -101,6 +103,7 @@ def tasks_unreserve(tasks, num):
             task_done = int(r.hget(task_key, 'done'))
             if task_done >= need_likes:
                 r.delete(task_key)
+                droplet.flush_droplets()
             else:
                 task_in_work = int(r.hget(task_key, 'in_work'))
                 r.hset(task_key, mapping={'in_work': task_in_work - num})
@@ -117,8 +120,8 @@ def _task_reserve(task_key, num):
             'need_likes': need_likes,
             'task_done': task_done,
         })
-        if task_in_work > 0:
-            return False
+        # if task_in_work > 0:
+        #     return False
         r.hset(task_key, mapping={'in_work': task_in_work + num})
         return True
 
@@ -166,6 +169,3 @@ def exist_active_accs():
         return True
     else:
         return False
-
-
-flush_tasks_in_work()
