@@ -84,8 +84,9 @@ def do_req(type_req, end_point, payloads=None) -> requests.Response:
 
         return resp
 
+
 def flush_droplets():
     resp = do_req('get', 'droplets')
     for droplet_info in json.loads(resp.content)['droplets']:
         if droplet_info['name'].startswith(DROP_PREFIX):
-            do_req('del', f'droplets/{droplet_info['id']}')
+            do_req('del', f'droplets/{droplet_info["id"]}')
