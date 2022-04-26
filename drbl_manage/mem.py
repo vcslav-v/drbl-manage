@@ -103,7 +103,6 @@ def tasks_unreserve(tasks, num):
             task_done = int(r.hget(task_key, 'done'))
             if task_done >= need_likes:
                 r.delete(task_key)
-                droplet.flush_droplets()
             else:
                 task_in_work = int(r.hget(task_key, 'in_work'))
                 r.hset(task_key, mapping={'in_work': task_in_work - num})
@@ -140,6 +139,7 @@ def get_active_tasks():
     task_keys = r.keys(f'{DR_TASK}:*')
     tasks = []
     if not task_keys:
+        droplet.flush_droplets()
         return tasks
     for task_key in task_keys:
         task_id = task_key.split(':')[-1]
