@@ -22,7 +22,7 @@ def send_tg_alarm(message):
         ))
 
 
-@sched.scheduled_job('interval', minutes=6)
+@sched.scheduled_job('interval', minutes=3)
 @logger.catch
 def reg_new_accs():
     logger.debug('check for new accs')
