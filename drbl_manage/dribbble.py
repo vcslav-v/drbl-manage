@@ -66,7 +66,7 @@ def _follow(driver):
 @logger.catch
 def make_new_user(selenium_ip):
     person = _get_rand_person()
-    with Browser(selenium_ip) as brwsr:
+    with Browser(selenium_ip, proxy=False) as brwsr:
         brwsr.driver.get('https://dribbble.com/signup/new')
         _do_sign_up(brwsr.driver, person)
         _do_boarding(brwsr.driver)
