@@ -10,8 +10,7 @@ from drbl_manage.droplet import Droplet
 
 sched = BlockingScheduler()
 
-ACC_BY_DROPLET = 3
-
+ACC_BY_CICLE = 1
 
 def send_tg_alarm(message):
     requests.post(
@@ -28,12 +27,7 @@ def reg_new_accs():
     logger.debug('check for new accs')
     if db_tools.len_accs() - mem.get_need_accs() < 0:
         logger.debug('start for new accs')
-        with Droplet() as do_drop:
-            for _ in range(ACC_BY_DROPLET):
-                try:
-                    dribbble.make_new_user(do_drop.ip)
-                except Exception:
-                    logger.error('make_new_user Exception')
+        dribbble.make_new_user()
 
 
 @sched.scheduled_job('interval', minutes=3)
@@ -44,7 +38,7 @@ def do_like_tasks():
         logger.debug(f'exist_active_tasks - {mem.exist_active_tasks()}')
         logger.debug(f'exist_active_accs - {mem.exist_active_accs()}')
         return
-    tasks = mem.set_tasks_in_work(ACC_BY_DROPLET)
+    tasks = mem.set_tasks_in_work(ACC_BY_CICLE)
     logger.debug(f'tasks - {tasks}')
     if tasks:
         thread = threading.Thread(target=do_tasks, args=(tasks,))
@@ -52,16 +46,15 @@ def do_like_tasks():
 
 
 def do_tasks(tasks):
-    with Droplet() as do_drop:
-        logger.debug('start for tasks')
-        for _ in range(ACC_BY_DROPLET):
-            try:
-                dribbble.do_tasks(do_drop.ip, tasks)
-            except Exception as e:
-                logger.error(e.__repr__())
-                break
-            finally:
-                mem.tasks_unreserve(tasks, 1)
+    logger.debug('start for tasks')
+    for _ in range(ACC_BY_CICLE):
+        try:
+            dribbble.do_tasks(tasks)
+        except Exception as e:
+            logger.error(e.__repr__())
+            break
+        finally:
+            mem.tasks_unreserve(tasks, 1)
 
 
 if __name__ == "__main__":

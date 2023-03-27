@@ -14,9 +14,9 @@ from drbl_manage.models import Account
 
 
 @logger.catch
-def do_tasks(selenium_ip, tasks):
+def do_tasks(tasks):
     logger.debug('task {tasks}'.format(tasks=tasks))
-    with Browser(selenium_ip, False, False) as brwsr:
+    with Browser(False) as brwsr:
         logger.debug('brwsr open')
         account: Account = db_tools.get_acc(mem.pop_acc_id())
         if not account:
@@ -36,7 +36,6 @@ def do_tasks(selenium_ip, tasks):
                 _follow(brwsr.driver)
             except Exception as e:
                 logger.error(f'_follow {e.__repr__()}')
-        brwsr.save_cookies('https://dribbble.com', account.username)
 
 
 def _like(driver):
@@ -64,30 +63,25 @@ def _follow(driver):
 
 
 @logger.catch
-def make_new_user(selenium_ip):
+def make_new_user():
     person = _get_rand_person()
-    with Browser(selenium_ip, proxy=False) as brwsr:
+    with Browser() as brwsr:
         brwsr.driver.get('https://dribbble.com/signup/new')
         _do_sign_up(brwsr.driver, person)
         _do_boarding(brwsr.driver)
         db_tools.add_account(person)
-        brwsr.save_cookies('https://dribbble.com', person['username'])
 
 
 def _login(brwsr: Browser, account: Account):
-    brwsr.set_cookies('https://dribbble.com', account.name)
-    try:
-        WebDriverWait(brwsr.driver, timeout=3).until(
-            lambda d: d.find_element(By.XPATH, '//a[@data-site-nav-element="User"]')
-        )
-    except TimeoutException:
-        brwsr.driver.get('https://dribbble.com/session/new')
-        username_input_elem = brwsr.driver.find_element(By.ID, 'login')
-        username_input_elem.send_keys(account.email)
-        pass_input_elem = brwsr.driver.find_element(By.ID, 'password')
-        pass_input_elem.send_keys(account.password)
-        btn_submit = brwsr.driver.find_element(By.XPATH, '//input[@type="submit"]')
-        btn_submit.click()
+    brwsr.driver.get('https://dribbble.com/session/new')
+    username_input_elem = WebDriverWait(brwsr.driver, timeout=20).until(
+        lambda d: d.find_element(By.ID, 'login')
+    )
+    username_input_elem.send_keys(account.email)
+    pass_input_elem = brwsr.driver.find_element(By.ID, 'password')
+    pass_input_elem.send_keys(account.password)
+    btn_submit = brwsr.driver.find_element(By.XPATH, '//input[@type="submit"]')
+    btn_submit.click()
 
     WebDriverWait(brwsr.driver, timeout=120).until(
         lambda d: d.find_element(By.XPATH, '//a[@data-site-nav-element="User"]')
