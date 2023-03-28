@@ -4,8 +4,6 @@ from loguru import logger
 
 import redis
 
-from drbl_manage import droplet
-
 ACCOUNTS = 'accounts'
 DR_TASK = 'task'
 NEED_ACC = 'need_accs'
@@ -139,7 +137,6 @@ def get_active_tasks():
     task_keys = r.keys(f'{DR_TASK}:*')
     tasks = []
     if not task_keys:
-        droplet.flush_droplets()
         return tasks
     for task_key in task_keys:
         task_id = task_key.split(':')[-1]
