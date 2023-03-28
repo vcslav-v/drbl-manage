@@ -6,7 +6,6 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 from loguru import logger
 
 from drbl_manage import db_tools, dribbble, mem
-from drbl_manage.droplet import Droplet
 
 sched = BlockingScheduler()
 
