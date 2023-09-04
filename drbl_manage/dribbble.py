@@ -7,6 +7,7 @@ from loguru import logger
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.action_chains import ActionChains
 
 from drbl_manage import db_tools, mem
 from drbl_manage.browser import Browser
@@ -39,10 +40,7 @@ def do_tasks(tasks):
 
 
 def _like(driver):
-    like_elem = WebDriverWait(driver, timeout=10).until(
-        lambda d: d.find_element(By.ID, 'shots-like-button')
-    )
-    like_elem.click()
+    ActionChains(driver).send_keys('l').perform()
     sleep(3)
 
 
