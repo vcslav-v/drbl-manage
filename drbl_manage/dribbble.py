@@ -82,7 +82,7 @@ def _login(brwsr: Browser, account: Account):
     btn_submit.click()
 
     WebDriverWait(brwsr.driver, timeout=120).until(
-        lambda d: d.find_element(By.XPATH, '//a[@href="/uploads/new"]')
+        lambda d: d.find_element(By.XPATH, '//div[@class="nav-v2-avatar"]')
     )
 
 
