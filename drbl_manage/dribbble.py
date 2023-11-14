@@ -40,7 +40,10 @@ def do_tasks(tasks):
 
 
 def _like(driver):
-    ActionChains(driver).send_keys('l').perform()
+    like_button = WebDriverWait(driver, timeout=5).until(
+        lambda d: d.find_element(By.XPATH, '//div[contains(@class, "like-action")]')
+    )
+    like_button.click()
     sleep(3)
 
 
@@ -84,6 +87,13 @@ def _login(brwsr: Browser, account: Account):
     WebDriverWait(brwsr.driver, timeout=120).until(
         lambda d: d.find_element(By.XPATH, '//div[@class="nav-v2-avatar"]')
     )
+    try:
+        close_dialoge_button = WebDriverWait(brwsr.driver, timeout=5).until(
+            lambda d: d.find_element(By.XPATH, '//sl-dialog//button')
+        )
+        close_dialoge_button.click()
+    except TimeoutException:
+        pass
 
 
 def _get_new_email():
